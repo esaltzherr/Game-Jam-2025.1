@@ -946,10 +946,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 333932849}
-  speed: 3
+  speed: 4
   distance: 3
   heightTolerance: 0.2
-  patrolDistance: 3
+  bounceForce: 10
+  patrolSpeed: 2
+  patrolDistance: 10
+  waitPatrol: 2
 --- !u!212 &1968937072
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1014,7 +1017,7 @@ Transform:
   m_GameObject: {fileID: 1968937068}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.42, y: -0.27, z: 0}
+  m_LocalPosition: {x: -6.81, y: -0.32, z: 0}
   m_LocalScale: {x: 0.8656, y: 0.7312, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1032,7 +1035,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 100
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
