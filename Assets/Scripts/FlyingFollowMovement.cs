@@ -44,6 +44,7 @@ public class FlyingFollowMovement : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             // Slight bounce effect when hitting character
+            Debug.Log("Hit!");
             Vector2 bounceDirection = collision.contacts[0].normal * bounceForce; 
             rb.AddForce(bounceDirection, ForceMode2D.Impulse);
         }
