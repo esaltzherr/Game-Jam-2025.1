@@ -917,7 +917,7 @@ GameObject:
   - component: {fileID: 1478679172}
   - component: {fileID: 1478679171}
   m_Layer: 0
-  m_Name: 7260007af3def70bb3a181ee99888cd5_0
+  m_Name: Fireplace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
