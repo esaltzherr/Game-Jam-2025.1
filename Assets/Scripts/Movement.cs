@@ -12,6 +12,7 @@ public class Movement : MonoBehaviour
     private float bounceDuration = 0.2f; // Prevents instant movement override
     private float bounceTimer = 0f;
     private bool isBouncing = false;
+    private bool running = false;
 
     private void Awake()
     {
@@ -31,9 +32,28 @@ public class Movement : MonoBehaviour
             }
             return; // Ignore movement input while bouncing
         }
-        float moveSpeed = Input.GetKey(KeyCode.LeftShift) ? speed * sprintMultiplier : speed;
 
-        float moveInput = Input.GetAxisRaw("Horizontal"); // Get input (-1 for A, 1 for D)
+        float moveSpeed = speed;
+
+        if (grounded && Input.GetKey(KeyCode.LeftShift))
+        {
+            Debug.Log("Running!");
+            running = true;
+            moveSpeed *= sprintMultiplier;
+        }
+        else if (!grounded && running && Input.GetKey(KeyCode.LeftShift))
+        {
+            Debug.Log("Running and Jumping");
+            running = true;
+            moveSpeed *= sprintMultiplier;
+        }
+        else
+        {
+            Debug.Log("Walking");
+            running = false;
+        }
+
+        float moveInput = Input.GetAxisRaw("Horizontal"); 
         body.linearVelocity = new Vector2(moveInput * moveSpeed, body.linearVelocity.y);
         
         if(Input.GetKey(KeyCode.Space) && grounded)

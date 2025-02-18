@@ -48,7 +48,6 @@ public class FollowMovement : MonoBehaviour
 
         if (Target.transform.position.y - transform.position.y <= heightTolerance)
         {
-            Debug.Log("Following Player");
             FollowPlayer();
         }
         
@@ -74,7 +73,6 @@ public class FollowMovement : MonoBehaviour
         if (movingRight)
         {
 
-            Debug.Log("Going Right!");
             rb.linearVelocity = new Vector2(patrolSpeed, rb.linearVelocity.y);
             if (transform.position.x >= patrolEnd.x && !isWaiting)
             {
@@ -83,7 +81,6 @@ public class FollowMovement : MonoBehaviour
         }
         else
         {
-            Debug.Log("Going Left!");
             rb.linearVelocity = new Vector2(-patrolSpeed, rb.linearVelocity.y);
             if (transform.position.x <= patrolStart.x && !isWaiting)
             {
@@ -96,7 +93,6 @@ public class FollowMovement : MonoBehaviour
     {
         isWaiting = true;
         rb.linearVelocity = Vector2.zero; // Stop movement while waiting
-        Debug.Log("Waiting...");
         yield return new WaitForSeconds(waitPatrol);
         isWaiting = false;
     }
@@ -105,7 +101,6 @@ public class FollowMovement : MonoBehaviour
     {
         isWaiting = true;
         rb.linearVelocity = Vector2.zero; // Stop movement while waiting
-        Debug.Log("Waiting...");
         yield return new WaitForSeconds(waitPatrol);
         movingRight = !movingRight; // Switch direction
         isWaiting = false;
@@ -121,8 +116,6 @@ public class FollowMovement : MonoBehaviour
         }
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Hit!");
-
             // Calculate bounce direction away from player
             Vector2 bounceDirection = (rb.position - (Vector2)collision.transform.position).normalized;
             rb.linearVelocity = bounceDirection * bounceForce;
