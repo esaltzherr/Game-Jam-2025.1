@@ -839,7 +839,7 @@ MonoBehaviour:
   speed: 4
   distance: 3
   slowSpeed: 2
-  bounceForce: 500
+  bounceForce: 10
 --- !u!50 &1833734512
 Rigidbody2D:
   serializedVersion: 5

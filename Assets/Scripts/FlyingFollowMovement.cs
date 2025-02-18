@@ -4,6 +4,9 @@ public class FlyingFollowMovement : MonoBehaviour
 {
     public GameObject Target;
     private float Dis;
+    private bool isBouncing = false;
+    private float bounceDuration = 0.2f; // Prevents instant movement override
+    private float bounceTimer = 0f;
 
     [SerializeField] private float speed; 
     [SerializeField] private float distance;
@@ -23,6 +26,15 @@ public class FlyingFollowMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isBouncing)
+        {
+            bounceTimer -= Time.deltaTime;
+            if (bounceTimer <= 0)
+            {
+                isBouncing = false;
+            }
+            return; // Stop movement while bouncing
+        }
         Vector2 targetPosition = Target.transform.position;
         Dis = Vector2.Distance(rb.position, Target.transform.position);
 
@@ -41,12 +53,16 @@ public class FlyingFollowMovement : MonoBehaviour
             // Slight bounce effect when hitting ground
             rb.linearVelocity *= 0.5f; 
         }
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.CompareTag("Player"))
         {
-            // Slight bounce effect when hitting character
-            Debug.Log("Hit!");
-            Vector2 bounceDirection = collision.contacts[0].normal * bounceForce; 
-            rb.AddForce(bounceDirection, ForceMode2D.Impulse);
+         
+
+            // Calculate bounce direction away from player
+            Vector2 bounceDirection = (rb.position - (Vector2)collision.transform.position).normalized;
+            rb.linearVelocity = bounceDirection * bounceForce;
+
+            isBouncing = true;
+            bounceTimer = bounceDuration;
         }
     }
 }
