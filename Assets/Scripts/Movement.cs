@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    [SerializeField] private float speed; 
+    [SerializeField] private float speed;
+    [SerializeField] private float sprintMultiplier; 
     [SerializeField] private float jump; 
     [SerializeField] private float bounceForce;
 
@@ -30,8 +31,11 @@ public class Movement : MonoBehaviour
             }
             return; // Ignore movement input while bouncing
         }
+        float moveSpeed = Input.GetKey(KeyCode.LeftShift) ? speed * sprintMultiplier : speed;
+
+        float moveInput = Input.GetAxisRaw("Horizontal"); // Get input (-1 for A, 1 for D)
+        body.linearVelocity = new Vector2(moveInput * moveSpeed, body.linearVelocity.y);
         
-        body.linearVelocity = new Vector2(Input.GetAxis("Horizontal") * speed, body.linearVelocity.y);
         if(Input.GetKey(KeyCode.Space) && grounded)
         {
             Jump();

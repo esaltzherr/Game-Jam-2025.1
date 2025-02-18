@@ -318,8 +318,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5407965409916984984, guid: bb803631f7682da40b7e44caaed141b9, type: 3}
+      propertyPath: speed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5407965409916984984, guid: bb803631f7682da40b7e44caaed141b9, type: 3}
       propertyPath: bounceForce
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5407965409916984984, guid: bb803631f7682da40b7e44caaed141b9, type: 3}
+      propertyPath: sprintMultiplier
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7464078649475344575, guid: bb803631f7682da40b7e44caaed141b9, type: 3}
       propertyPath: m_Constraints
