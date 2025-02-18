@@ -317,6 +317,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5407965409916984984, guid: bb803631f7682da40b7e44caaed141b9, type: 3}
+      propertyPath: bounceForce
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7464078649475344575, guid: bb803631f7682da40b7e44caaed141b9, type: 3}
       propertyPath: m_Constraints
       value: 4
@@ -748,7 +752,7 @@ GameObject:
   - component: {fileID: 1833734513}
   m_Layer: 0
   m_Name: Flying Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -836,7 +840,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 333932849}
-  speed: 4
+  speed: 2
   distance: 3
   slowSpeed: 2
   bounceForce: 10
@@ -928,7 +932,7 @@ GameObject:
   - component: {fileID: 1968937075}
   m_Layer: 0
   m_Name: Ground Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -946,7 +950,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 333932849}
-  speed: 4
+  speed: 2
   distance: 3
   heightTolerance: 0.2
   bounceForce: 10
