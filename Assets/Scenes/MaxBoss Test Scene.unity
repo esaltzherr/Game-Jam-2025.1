@@ -460,8 +460,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5407965409916984984, guid: bb803631f7682da40b7e44caaed141b9, type: 3}
+      propertyPath: jump
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5407965409916984984, guid: bb803631f7682da40b7e44caaed141b9, type: 3}
       propertyPath: speed
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5407965409916984984, guid: bb803631f7682da40b7e44caaed141b9, type: 3}
       propertyPath: bounceForce
@@ -476,8 +480,16 @@ PrefabInstance:
       value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 5407965409916984984, guid: bb803631f7682da40b7e44caaed141b9, type: 3}
+      propertyPath: slideDuration
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5407965409916984984, guid: bb803631f7682da40b7e44caaed141b9, type: 3}
       propertyPath: sprintMultiplier
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5407965409916984984, guid: bb803631f7682da40b7e44caaed141b9, type: 3}
+      propertyPath: slideSpeedMultiplier
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 7464078649475344575, guid: bb803631f7682da40b7e44caaed141b9, type: 3}
       propertyPath: m_Constraints
@@ -1094,7 +1106,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1968937069
 MonoBehaviour:
   m_ObjectHideFlags: 0
