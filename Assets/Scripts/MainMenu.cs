@@ -6,8 +6,8 @@ public class MainMenu : MonoBehaviour
 {
     // Start is called before the first frame update
     // public string SceneToStart;
-    public GameObject OptionsMenuObject;
-    public GameObject MainMenuObject;
+    // public GameObject OptionsMenuObject;
+    // public GameObject MainMenuObject;
     public void StartGame(string Scene)
     {
         Debug.Log("Starting Game");
