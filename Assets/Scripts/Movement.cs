@@ -5,10 +5,11 @@ public class Movement : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float sprintMultiplier;
     [SerializeField] private float jump;
-    [SerializeField] private float bounceForce;
+    [SerializeField] private float bounceForce;       // Bounce force for enemies
+    [SerializeField] private float hazardBounceForce; // Stronger/weaker bounce force for hazards
     [SerializeField] private float shrinkScaleY;
     [SerializeField] private float normalScaleY;
-    [SerializeField] private float slideSpeedMultiplier = 2f; // Increased slide speed
+    [SerializeField] private float slideSpeedMultiplier = 2f;
     [SerializeField] private float slideDuration = 0.5f;
 
     private Rigidbody2D body;
@@ -55,14 +56,11 @@ public class Movement : MonoBehaviour
             running = true;
             moveSpeed *= sprintMultiplier;
         }
-        //Sprinting and Jumping
         else if (!grounded && running && Input.GetKey(KeyCode.LeftShift))
         {
-            Debug.Log("Running and Jumping");
             running = true;
             moveSpeed *= sprintMultiplier;
         }
-        //Walking
         else
         {
             running = false;
@@ -74,7 +72,6 @@ public class Movement : MonoBehaviour
             StartSlide();
         }
 
-        // Handle sliding duration
         if (isSliding)
         {
             slideTimer -= Time.deltaTime;
@@ -82,7 +79,7 @@ public class Movement : MonoBehaviour
             {
                 EndSlide();
             }
-            return; // Prevents normal movement logic while sliding
+            return;
         }
 
         // Crouching logic (only if not sliding)
@@ -125,7 +122,6 @@ public class Movement : MonoBehaviour
         slideTimer = slideDuration;
         Debug.Log("Sliding!");
 
-        // Apply sliding velocity
         body.linearVelocity = new Vector2(body.linearVelocity.x * slideSpeedMultiplier, body.linearVelocity.y);
         transform.localScale = new Vector3(originalScale.x, shrinkScaleY, originalScale.z);
     }
@@ -146,11 +142,27 @@ public class Movement : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            Vector2 bounceDirection = (body.position - (Vector2)collision.transform.position).normalized;
-            body.linearVelocity = bounceDirection * bounceForce;
-
-            isBouncing = true;
-            bounceTimer = bounceDuration;
+            BounceAway(collision, bounceForce);
         }
+
+        if (collision.gameObject.CompareTag("Hazard"))
+        {
+            BounceAway(collision, hazardBounceForce);
+        }
+    }
+
+    private void BounceAway(Collision2D collision, float force)
+    {
+        Vector2 bounceDirection = (body.position - (Vector2)collision.transform.position).normalized;
+
+        // Ensure the bounce is mostly upwards
+        bounceDirection.y = Mathf.Clamp(bounceDirection.y, 0.5f, 1f);
+        bounceDirection.Normalize();
+
+        body.linearVelocity = Vector2.zero; // Reset velocity before applying force
+        body.AddForce(bounceDirection * force, ForceMode2D.Impulse);
+
+        isBouncing = true;
+        bounceTimer = bounceDuration;
     }
 }

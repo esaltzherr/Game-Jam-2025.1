@@ -1,0 +1,34 @@
+using UnityEngine;
+
+public class Jeremy : MonoBehaviour
+{
+    public GameObject Target;
+    [SerializeField] private float speed = 3f; // Movement speed
+
+    private Rigidbody2D rb;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        rb.isKinematic = false;
+        rb.gravityScale = 0;
+        rb.freezeRotation = true;
+    }
+
+    void Update()
+    {
+        if (Target == null) return;
+
+        // Move towards the player continuously
+        Vector2 direction = (Target.transform.position - transform.position).normalized;
+        rb.linearVelocity = direction * speed;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("Player touched!");
+        }
+    }
+}
