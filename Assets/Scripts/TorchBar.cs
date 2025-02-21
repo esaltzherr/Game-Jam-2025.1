@@ -36,13 +36,10 @@ public class TorchBar : MonoBehaviour
 
     public void enableFilling(){
         filling = true;
- 
-        Debug.Log("true");
-       
+        
     }
     public void disableFilling(){
         filling = false;
-        Debug.Log("tflaserue");
     }
     // Get the remaining percentage of the torch
     public float GetTorchPercentage()
