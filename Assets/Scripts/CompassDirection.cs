@@ -123,27 +123,6 @@ public class CompassDirection : MonoBehaviour
         }
     }
 
-    // Removes a target from the list and prevents errors when it gets destroyed
-    public void RemoveTarget(Transform target)
-    {
-        if (targetList.Contains(target))
-        {
-            targetList.Remove(target);
-
-            // Reset targetIndex if the current target was removed
-            if (currentTarget == target)
-            {
-                currentTarget = homeTarget;
-                isPointingHome = true;
-            }
-        }
-
-        // Clean up the list by removing any null objects
-        targetList.RemoveAll(t => t == null);
-
-        UpdateTargetText(); // Update the text when a target is removed
-    }
-
     // Updates the UI text with the current target's name
     private void UpdateTargetText()
     {
