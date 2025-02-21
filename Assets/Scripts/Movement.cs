@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.UI; 
+using UnityEngine.SceneManagement;
 
 public class Movement : MonoBehaviour
 {
@@ -11,8 +13,13 @@ public class Movement : MonoBehaviour
     [SerializeField] private float normalScaleY;
     [SerializeField] private float slideSpeedMultiplier = 2f;
     [SerializeField] private float slideDuration = 0.5f;
+    [SerializeField] private Image damageOverlay; // UI overlay for damage effect
+    [SerializeField] private int maxHealth = 3;
+    [SerializeField] private float healCooldown = 5f;
 
     private Rigidbody2D body;
+    private int health;
+    private float healTimer;
     private bool grounded;
     private float bounceDuration = 0.2f;
     private float bounceTimer = 0f;
@@ -34,6 +41,8 @@ public class Movement : MonoBehaviour
 
         originalSpeed = speed;
         crouchSpeed = speed / 2f;
+        health = maxHealth;
+        healTimer = healCooldown;
     }
 
     private void Update()
@@ -112,6 +121,7 @@ public class Movement : MonoBehaviour
 
     private void Jump()
     {
+        Debug.Log("Jumping");
         body.linearVelocity = new Vector2(body.linearVelocity.x, jump);
         grounded = false;
     }
@@ -130,7 +140,6 @@ public class Movement : MonoBehaviour
     {
         isSliding = false;
         transform.localScale = new Vector3(originalScale.x, normalScaleY, originalScale.z);
-        Debug.Log("Slide Ended");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -139,16 +148,57 @@ public class Movement : MonoBehaviour
         {
             grounded = true;
         }
-
-        if (collision.gameObject.CompareTag("Enemy"))
+        else if (collision.gameObject.CompareTag("Enemy"))
         {
-            BounceAway(collision, bounceForce);
+            TakeDamage(collision, bounceForce);
+        }
+        else if (collision.gameObject.CompareTag("Hazard"))
+        {
+            TakeDamage(collision, hazardBounceForce);
+        }
+    }
+
+    private void TakeDamage(Collision2D collision, float force)
+    {
+        health--;
+        Debug.Log("Health: " + health);
+        if (health <= 0)
+        {
+            GameOver();
+            return;
         }
 
-        if (collision.gameObject.CompareTag("Hazard"))
-        {
-            BounceAway(collision, hazardBounceForce);
-        }
+        // Reset heal timer
+        healTimer = healCooldown;
+
+        // Update screen effect
+        UpdateDamageOverlay();
+
+        // Knockback effect
+        BounceAway(collision, force);
+    }
+
+    private void UpdateDamageOverlay()
+    {
+        float alpha = 0f;
+
+        if (health == 2)
+            alpha = 0.2f; // Light red
+        else if (health == 1)
+            alpha = 0.5f; // Strong red
+
+        damageOverlay.color = new Color(1, 0, 0, alpha);
+    }
+
+    private void Heal(int amount)
+    {
+        health = Mathf.Min(maxHealth, health + amount);
+        UpdateDamageOverlay();
+    }
+
+    private void GameOver()
+    {
+        Debug.Log("Game Over!");
     }
 
     private void BounceAway(Collision2D collision, float force)
@@ -156,11 +206,14 @@ public class Movement : MonoBehaviour
         Vector2 bounceDirection = (body.position - (Vector2)collision.transform.position).normalized;
 
         // Ensure the bounce is mostly upwards
-        bounceDirection.y = Mathf.Clamp(bounceDirection.y, 0.5f, 1f);
+        if (bounceDirection.y < 0.3f)
+        { 
+        
+            bounceDirection.y = 0.75f; // Ensure a reasonable upwards push
+        }
         bounceDirection.Normalize();
 
-        body.linearVelocity = Vector2.zero; // Reset velocity before applying force
-        body.AddForce(bounceDirection * force, ForceMode2D.Impulse);
+        body.linearVelocity = bounceDirection * force; // Directly set velocity instead of using AddForce
 
         isBouncing = true;
         bounceTimer = bounceDuration;
