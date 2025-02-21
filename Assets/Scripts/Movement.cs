@@ -13,13 +13,10 @@ public class Movement : MonoBehaviour
     [SerializeField] private float normalScaleY;
     [SerializeField] private float slideSpeedMultiplier = 2f;
     [SerializeField] private float slideDuration = 0.5f;
-    [SerializeField] private Image damageOverlay; // UI overlay for damage effect
     [SerializeField] private int maxHealth = 3;
     [SerializeField] private float healCooldown = 5f;
 
     private Rigidbody2D body;
-    private int health;
-    private float healTimer;
     private bool grounded;
     private float bounceDuration = 0.2f;
     private float bounceTimer = 0f;
@@ -32,6 +29,11 @@ public class Movement : MonoBehaviour
     private float crouchSpeed;
     private bool isSliding = false;
     private float slideTimer = 0f;
+
+    public bool TimerOn = false;
+    private int health;
+    private float healTimer;
+
 
     private void Awake()
     {
@@ -58,6 +60,28 @@ public class Movement : MonoBehaviour
         }
 
         float moveSpeed = speed;
+
+        //Heal factor
+        TimerOn = false;
+
+        if(health < 3)
+        {
+            TimerOn = true;
+            if(TimerOn)
+            {
+                if(healTimer > 0)
+                {
+                    healTimer -= Time.deltaTime;
+                }
+                else
+                {
+                    health ++;
+                    healTimer = healCooldown;
+                    Debug.Log("Healing! Health: " + health);
+                    TimerOn = false;
+                }
+            }
+        }
 
         // Sprinting logic
         if (grounded && Input.GetKey(KeyCode.LeftShift) && !isCrouching)
@@ -171,30 +195,10 @@ public class Movement : MonoBehaviour
         // Reset heal timer
         healTimer = healCooldown;
 
-        // Update screen effect
-        UpdateDamageOverlay();
-
         // Knockback effect
         BounceAway(collision, force);
     }
 
-    private void UpdateDamageOverlay()
-    {
-        float alpha = 0f;
-
-        if (health == 2)
-            alpha = 0.2f; // Light red
-        else if (health == 1)
-            alpha = 0.5f; // Strong red
-
-        damageOverlay.color = new Color(1, 0, 0, alpha);
-    }
-
-    private void Heal(int amount)
-    {
-        health = Mathf.Min(maxHealth, health + amount);
-        UpdateDamageOverlay();
-    }
 
     private void GameOver()
     {
