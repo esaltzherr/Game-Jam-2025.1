@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI; 
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class Movement : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private float slideDuration = 0.5f;
     [SerializeField] private int maxHealth = 3;
     [SerializeField] private float healCooldown = 5f;
+    [SerializeField] private Image damageOverlay; // UI overlay for red flash effect
 
     private Rigidbody2D body;
     private bool grounded;
@@ -45,6 +47,12 @@ public class Movement : MonoBehaviour
         crouchSpeed = speed / 2f;
         health = maxHealth;
         healTimer = healCooldown;
+
+        // Ensure the damage overlay starts fully transparent
+        if (damageOverlay != null)
+        {
+            damageOverlay.color = new Color(1, 0, 0, 0); // Fully transparent at start
+        }
     }
 
     private void Update()
@@ -58,6 +66,8 @@ public class Movement : MonoBehaviour
             }
             return;
         }
+
+        UpdateDamageOverlay();
 
         float moveSpeed = speed;
 
@@ -195,10 +205,38 @@ public class Movement : MonoBehaviour
         // Reset heal timer
         healTimer = healCooldown;
 
+        // Flash red briefly
+        StartCoroutine(FlashDamageEffect());
+
         // Knockback effect
         BounceAway(collision, force);
     }
 
+    private IEnumerator FlashDamageEffect()
+    {
+        if (damageOverlay == null) yield break; // Safety check
+
+        damageOverlay.color = new Color(1, 0, 0, 0.5f); // Show red flash (50% opacity)
+        yield return new WaitForSeconds(0.2f);
+        UpdateDamageOverlay(); // Adjust opacity based on health
+    }
+
+    private void UpdateDamageOverlay()
+    {
+        if (damageOverlay == null) return;
+        float alpha = 0f;
+
+        if(health == 3)
+        {
+            alpha = 0f;
+        }
+        else if (health == 2)
+            alpha = 0.2f; // Light red
+        else if (health == 1)
+            alpha = 0.5f; // Strong red
+
+        damageOverlay.color = new Color(1, 0, 0, alpha);
+    }
 
     private void GameOver()
     {
