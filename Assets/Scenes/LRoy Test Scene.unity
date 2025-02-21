@@ -397,8 +397,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c22c94d660d43746a1451491e7e1705, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minIntensity: 0.6
-  maxIntensity: 1.4
+  torchBar: {fileID: 0}
+  baseIntensity: 3
+  minDrop: 0.8
   flickerSpeed: 0.1
 --- !u!1 &82136533
 GameObject:
@@ -879,8 +880,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c22c94d660d43746a1451491e7e1705, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minIntensity: 0.2
-  maxIntensity: 0.3
+  torchBar: {fileID: 0}
+  baseIntensity: 3
+  minDrop: 0.8
   flickerSpeed: 0.1
 --- !u!114 &302715190
 MonoBehaviour:
@@ -2760,8 +2762,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c22c94d660d43746a1451491e7e1705, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minIntensity: 0.8
-  maxIntensity: 3
+  torchBar: {fileID: 2008862643}
+  baseIntensity: 3
+  minDrop: 0.8
   flickerSpeed: 0.3
 --- !u!114 &2008862643
 MonoBehaviour:
