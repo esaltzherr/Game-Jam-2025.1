@@ -874,7 +874,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &494997411
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1112,7 +1112,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!224 &620705227
 RectTransform:
@@ -1651,11 +1651,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4779658879824213759, guid: bb803631f7682da40b7e44caaed141b9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -29.9
+      value: -32.59
       objectReference: {fileID: 0}
     - target: {fileID: 4779658879824213759, guid: bb803631f7682da40b7e44caaed141b9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.2
+      value: -1.11
       objectReference: {fileID: 0}
     - target: {fileID: 4779658879824213759, guid: bb803631f7682da40b7e44caaed141b9, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2140,7 +2140,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -36761,7 +36761,7 @@ Transform:
   m_GameObject: {fileID: 1968937068}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.05, y: -1.6, z: 0}
+  m_LocalPosition: {x: -15, y: -1.54, z: 0}
   m_LocalScale: {x: 0.8656, y: 0.7312, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -37020,7 +37020,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -42185,6 +42185,7 @@ Tilemap:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 620705227}
   - {fileID: 29968649}
   - {fileID: 1392283532}
   - {fileID: 1968937073}
@@ -42193,4 +42194,3 @@ SceneRoots:
   - {fileID: 644696150}
   - {fileID: 968458850}
   - {fileID: 1646724908}
-  - {fileID: 620705227}
