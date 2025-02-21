@@ -216,8 +216,8 @@ public class Movement : MonoBehaviour
     {
         if (damageOverlay == null) yield break; // Safety check
 
-        damageOverlay.color = new Color(1, 0, 0, 0.5f); // Show red flash (50% opacity)
-        yield return new WaitForSeconds(0.2f);
+        damageOverlay.color = new Color(1, 0, 0, 0.8f); // Show red flash (50% opacity)
+        yield return new WaitForSeconds(0.3f);
         UpdateDamageOverlay(); // Adjust opacity based on health
     }
 
@@ -233,7 +233,7 @@ public class Movement : MonoBehaviour
         else if (health == 2)
             alpha = 0.2f; // Light red
         else if (health == 1)
-            alpha = 0.5f; // Strong red
+            alpha = 0.6f; // Strong red
 
         damageOverlay.color = new Color(1, 0, 0, alpha);
     }
