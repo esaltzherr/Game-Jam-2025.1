@@ -39,6 +39,7 @@ public class Movement : MonoBehaviour
     private bool isInvincible = false;
 
     private float scareRadius = 3;
+    private string facing = "Left";
 
     private void Awake()
     {
@@ -60,6 +61,14 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
+
+
+
+        UpdateDamageOverlay();
+
+        float moveSpeed = speed;
+
+
         if (isBouncing)
         {
             bounceTimer -= Time.deltaTime;
@@ -72,7 +81,6 @@ public class Movement : MonoBehaviour
 
         UpdateDamageOverlay();
 
-        float moveSpeed = speed;
 
         //Heal factor
         TimerOn = false;
@@ -159,6 +167,49 @@ public class Movement : MonoBehaviour
         {
             Scare();
         }
+        // Crouching logic (only if not sliding)
+        if (Input.GetKey(KeyCode.S) && grounded)
+        {
+            if (!isCrouching)
+            {
+                isCrouching = true;
+                speed = crouchSpeed;
+                // When crouching, you might want to adjust Y scale but keep the facing:
+                float currentX = (facing == "Right") ? Mathf.Abs(originalScale.x) : -Mathf.Abs(originalScale.x);
+                transform.localScale = new Vector3(currentX, shrinkScaleY, originalScale.z);
+            }
+        }
+        else
+        {
+            isCrouching = false;
+            speed = originalSpeed;
+            // Preserve facing when resetting scale
+            float currentX = (facing == "Right") ? Mathf.Abs(originalScale.x) : -Mathf.Abs(originalScale.x);
+            transform.localScale = new Vector3(currentX, normalScaleY, originalScale.z);
+        }
+
+        // Later, update facing based on horizontal input:
+        if (moveInput > 0)
+        {
+            // Moving left (default orientation): ensure x scale is positive
+            if (facing != "Left")
+            {
+                facing = "Left";
+                float currentX = Mathf.Abs(originalScale.x);
+                transform.localScale = new Vector3(currentX, transform.localScale.y, originalScale.z);
+            }
+        }
+        else if (moveInput < 0)
+        {
+            // Moving right: set facing to "Right" by making x negative
+            if (facing != "Right")
+            {
+                facing = "Right";
+                float currentX = -Mathf.Abs(originalScale.x);
+                transform.localScale = new Vector3(currentX, transform.localScale.y, originalScale.z);
+            }
+        }
+
 
 
     }
@@ -205,7 +256,7 @@ public class Movement : MonoBehaviour
 
         health--;
         Debug.Log("Health: " + health);
-    
+
         if (health <= 0)
         {
             GameOver();
@@ -215,7 +266,7 @@ public class Movement : MonoBehaviour
         healTimer = healCooldown;
 
         StartCoroutine(FlashDamageEffect());
-        StartCoroutine(InvincibilityFrames()); 
+        StartCoroutine(InvincibilityFrames());
 
         BounceAway(collision, force);
     }
