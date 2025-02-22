@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
@@ -36,7 +36,7 @@ public class Movement : MonoBehaviour
     private int health;
     private float healTimer;
 
-
+    private float scareRadius = 3;
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
@@ -74,18 +74,18 @@ public class Movement : MonoBehaviour
         //Heal factor
         TimerOn = false;
 
-        if(health < 3)
+        if (health < 3)
         {
             TimerOn = true;
-            if(TimerOn)
+            if (TimerOn)
             {
-                if(healTimer > 0)
+                if (healTimer > 0)
                 {
                     healTimer -= Time.deltaTime;
                 }
                 else
                 {
-                    health ++;
+                    health++;
                     healTimer = healCooldown;
                     Debug.Log("Healing! Health: " + health);
                     TimerOn = false;
@@ -151,6 +151,13 @@ public class Movement : MonoBehaviour
         {
             Jump();
         }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Scare();
+        }
+
+
     }
 
     private void Jump()
@@ -226,7 +233,7 @@ public class Movement : MonoBehaviour
         if (damageOverlay == null) return;
         float alpha = 0f;
 
-        if(health == 3)
+        if (health == 3)
         {
             alpha = 0f;
         }
@@ -249,8 +256,8 @@ public class Movement : MonoBehaviour
 
         // Ensure the bounce is mostly upwards
         if (bounceDirection.y < 0.3f)
-        { 
-        
+        {
+
             bounceDirection.y = 0.75f; // Ensure a reasonable upwards push
         }
         bounceDirection.Normalize();
@@ -260,4 +267,42 @@ public class Movement : MonoBehaviour
         isBouncing = true;
         bounceTimer = bounceDuration;
     }
+
+
+
+    public void Scare()
+    {
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, scareRadius);
+
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            Debug.Log("Detected: " + enemy.gameObject.name);
+
+            if (enemy.CompareTag("Enemy"))
+            {
+                // Check if the enemy has a FlyingFollowMovement script
+                FlyingFollowMovement flyingScript = enemy.GetComponent<FlyingFollowMovement>();
+                if (flyingScript != null)
+                {
+                    Debug.Log("Scaring enemy (FlyingFollowMovement): " + enemy.gameObject.name);
+                    flyingScript.Scared(this.transform);
+                    continue; // Skip the rest of the loop since we found a match
+                }
+
+                // Check if the enemy has a FollowMovement script
+                FollowMovement followScript = enemy.GetComponent<FollowMovement>();
+                if (followScript != null)
+                {
+                    Debug.Log("Scaring enemy (FollowMovement): " + enemy.gameObject.name);
+                    followScript.Scared(this.transform);
+                    continue; // Stop checking once a script is found
+                }
+
+                // If neither script is found
+                Debug.LogWarning("No matching script found on: " + enemy.gameObject.name);
+            }
+        }
+    }
+
+
 }

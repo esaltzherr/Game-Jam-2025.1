@@ -4,18 +4,18 @@ using System.Collections;
 public class FollowMovement : MonoBehaviour
 {
     private Rigidbody2D rb;
-    
+
     public GameObject Target;
     private float Dis;
     private bool isBouncing = false;
     private float bounceDuration = 0.2f; // Prevents instant movement override
     private float bounceTimer = 0f;
 
-    [SerializeField] private float speed; 
+    [SerializeField] private float speed;
     [SerializeField] private float distance;
     [SerializeField] private float heightTolerance = 1f;
     [SerializeField] private float bounceForce;
-    [SerializeField] private float patrolSpeed; 
+    [SerializeField] private float patrolSpeed;
     [SerializeField] private float patrolDistance = 3f;
     [SerializeField] private float waitPatrol = 2f;
 
@@ -23,11 +23,11 @@ public class FollowMovement : MonoBehaviour
     private Vector2 patrolEnd;
     private bool movingRight = true;
     private bool isWaiting = false;
-    
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.isKinematic = false; 
+        rb.isKinematic = false;
         rb.freezeRotation = true;// Prevents physics forces from affecting it
 
         patrolStart = transform.position;
@@ -50,8 +50,8 @@ public class FollowMovement : MonoBehaviour
         {
             FollowPlayer();
         }
-        
-        else if(!isWaiting)
+
+        else if (!isWaiting)
         {
             Patrol();
         }
@@ -108,11 +108,11 @@ public class FollowMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        
+
         if (collision.gameObject.CompareTag("Ground"))
         {
             // Slight bounce effect when hitting ground
-            rb.linearVelocity *= 0.5f; 
+            rb.linearVelocity *= 0.5f;
         }
         if (collision.gameObject.CompareTag("Player"))
         {
@@ -123,5 +123,15 @@ public class FollowMovement : MonoBehaviour
             isBouncing = true;
             bounceTimer = bounceDuration;
         }
+    }
+
+
+    public void Scared(Transform player)
+    {
+        Vector2 bounceDirection = (rb.position - (Vector2)player.transform.position).normalized;
+        rb.linearVelocity = bounceDirection * bounceForce;
+
+        isBouncing = true;
+        bounceTimer = bounceDuration;
     }
 }

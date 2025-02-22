@@ -5,10 +5,10 @@ public class FlyingFollowMovement : MonoBehaviour
     public GameObject Target;
     private float Dis;
     private bool isBouncing = false;
-    private float bounceDuration = 0.2f; 
+    private float bounceDuration = 0.2f;
     private float bounceTimer = 0f;
 
-    [SerializeField] private float speed; 
+    [SerializeField] private float speed;
     [SerializeField] private float distance;  // Distance before slowing down
     [SerializeField] private float slowSpeed;
     [SerializeField] private float bounceForce;
@@ -21,9 +21,9 @@ public class FlyingFollowMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.isKinematic = false; 
-        rb.gravityScale = 0;    
-        rb.freezeRotation = true; 
+        rb.isKinematic = false;
+        rb.gravityScale = 0;
+        rb.freezeRotation = true;
     }
 
     void Update()
@@ -35,7 +35,7 @@ public class FlyingFollowMovement : MonoBehaviour
             {
                 isBouncing = false;
             }
-            return; 
+            return;
         }
 
         if (Target == null) return;
@@ -61,34 +61,43 @@ public class FlyingFollowMovement : MonoBehaviour
     {
         if (Target == null) return;
 
-        // **NEW:** Cast a ray from the enemy to the target
+        // Cast a ray from the enemy to the target
         Vector2 directionToTarget = (Target.transform.position - transform.position).normalized;
-        RaycastHit2D ray = Physics2D.Raycast(transform.position, directionToTarget, raycastRange);
 
-        if (ray.collider != null)
+        // Perform a raycast that hits multiple objects
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, directionToTarget, raycastRange);
+
+        foreach (RaycastHit2D hit in hits)
         {
-            if (ray.collider.gameObject == Target)  // Ensures it's the target, not a wall
+            // Ignore itself
+            if (hit.collider.gameObject == gameObject) continue;
+
+            Debug.Log("Ray hit: " + hit.collider.gameObject.name + " | Layer: " + LayerMask.LayerToName(hit.collider.gameObject.layer));
+
+            if (hit.collider.gameObject == Target)  // Ensure it's the target
             {
                 hasLineOfSight = true;
                 Debug.DrawRay(transform.position, directionToTarget * raycastRange, Color.green);
+                return; // Stop checking after hitting the target
             }
             else
             {
                 hasLineOfSight = false;
                 Debug.DrawRay(transform.position, directionToTarget * raycastRange, Color.red);
+                return; // Stop checking after hitting an obstacle
             }
         }
-        else
-        {
-            hasLineOfSight = false;
-        }
+
+        // If nothing was hit, no line of sight
+        hasLineOfSight = false;
     }
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            rb.linearVelocity *= 0.5f; 
+            rb.linearVelocity *= 0.5f;
         }
 
         if (collision.gameObject.CompareTag("Player"))
@@ -100,4 +109,16 @@ public class FlyingFollowMovement : MonoBehaviour
             bounceTimer = bounceDuration;
         }
     }
+
+    public void Scared(Transform player)
+    {
+        Vector2 bounceDirection = (rb.position - (Vector2)player.transform.position).normalized;
+        rb.linearVelocity = bounceDirection * bounceForce;
+
+        isBouncing = true;
+        bounceTimer = bounceDuration;
+    }
+
+
+
 }
