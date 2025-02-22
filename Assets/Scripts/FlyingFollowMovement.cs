@@ -14,7 +14,10 @@ public class FlyingFollowMovement : MonoBehaviour
     [SerializeField] private float bounceForce;
     [SerializeField] private float maxChaseDistance = 15f; // Max range to chase
     [SerializeField] private float raycastRange = 20f; // Distance for sight check
+    public AudioClip[] flapSounds;
+    public float cooldownDuration = 0.6f; // Cooldown duration in seconds
 
+    private float nextSoundTime = 0f;   // Tracks the next allowed time to play a sound
     private bool hasLineOfSight = false;
     private Rigidbody2D rb;
 
@@ -55,6 +58,24 @@ public class FlyingFollowMovement : MonoBehaviour
         float currentSpeed = (Dis > distance) ? speed : slowSpeed;
         Vector2 direction = (targetPosition - rb.position).normalized;
         rb.linearVelocity = direction * currentSpeed;
+
+
+       if (rb.linearVelocity.sqrMagnitude > 0.01f)
+        {
+            // Only play sound if the cooldown period has passed
+            if (Time.time >= nextSoundTime)
+            {
+                if (flapSounds.Length > 0)
+                {
+                    // Select a random sound from the array
+                    AudioClip clip = flapSounds[Random.Range(0, flapSounds.Length)];
+                    AudioManager.Instance.PlaySFX(clip);
+                    
+                    // Set the next allowed time to play a sound
+                    nextSoundTime = Time.time + cooldownDuration;
+                }
+            }
+        }
     }
 
     private void FixedUpdate()
