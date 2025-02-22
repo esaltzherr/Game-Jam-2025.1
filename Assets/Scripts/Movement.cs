@@ -40,6 +40,8 @@ public class Movement : MonoBehaviour
 
     private float scareRadius = 3;
     private string facing = "Left";
+    Animator animator;
+    
 
     public int branchCount = 0;
 
@@ -59,6 +61,7 @@ public class Movement : MonoBehaviour
         {
             damageOverlay.color = new Color(1, 0, 0, 0); // Fully transparent at start
         }
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -209,6 +212,8 @@ public class Movement : MonoBehaviour
             }
         }
 
+        float currentSpeed = Mathf.Abs(body.velocity.x);
+        animator.SetFloat("Movespeed", currentSpeed);
 
 
     }
@@ -365,6 +370,8 @@ public class Movement : MonoBehaviour
 
     public void Scare()
     {
+        animator.SetTrigger("Attack");
+
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, scareRadius);
 
         foreach (Collider2D enemy in hitEnemies)
