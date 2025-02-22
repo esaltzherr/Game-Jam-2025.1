@@ -219,7 +219,7 @@ public class Movement : MonoBehaviour
             }
         }
 
-        float currentSpeed = Mathf.Abs(body.velocity.x);
+        float currentSpeed = Mathf.Abs(body.linearVelocity.x);
         animator.SetFloat("Movespeed", currentSpeed);
 
         if (currentSpeed > 0 && Time.time >= nextWalkSoundTime)
