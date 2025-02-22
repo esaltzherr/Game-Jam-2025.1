@@ -38,13 +38,21 @@ public class OptionsMenuController : MonoBehaviour
     {
         // Toggle the Canvas on/off
         canvas.enabled = !canvas.enabled;
-        if (canvas.enabled == true){
+        if (canvas.enabled == true)
+        {
             // Initialize sliders with saved values or default to max volume
             masterSlider.value = PlayerPrefs.GetFloat("MasterVolume", 1f);
             musicSlider.value = PlayerPrefs.GetFloat("MusicVolume", 1f);
             sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume", 1f);
+
+            Time.timeScale = 0; // Pause game time
+        }
+        else
+        {
+            Time.timeScale = 1; // Resume game time
         }
     }
+
 
 
     public void ExitToMain(string Scene)
