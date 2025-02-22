@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class WoodCollectible : MonoBehaviour
 {
+    public AudioClip collectWood;
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player")) // Ensure the player has the correct tag
@@ -12,6 +13,7 @@ public class WoodCollectible : MonoBehaviour
                 counter.IncrementCollectibles();
             }
             Destroy(gameObject); // Remove the wood collectible from the scene
+            AudioManager.Instance.PlaySFX(collectWood);
         }
     }
 }
