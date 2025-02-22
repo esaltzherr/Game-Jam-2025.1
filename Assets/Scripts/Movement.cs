@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Movement : MonoBehaviour
 {
@@ -50,7 +51,9 @@ public class Movement : MonoBehaviour
     public AudioClip[] damageSounds;
     public AudioClip[] scareSounds;
     public AudioClip gameOverSound;
+
     public int branchCount = 0;
+    private List<GameObject> collectedBranches = new List<GameObject>();
 
     private void Awake()
     {
@@ -372,10 +375,35 @@ public class Movement : MonoBehaviour
         Debug.Log("Health Reset!");
     }
 
+    public void ResetGame()
+    {
+        branchCount = 0; // Reset branch count
+
+        // Reactivate all collected branches
+        foreach (GameObject branch in collectedBranches)
+        {
+            branch.SetActive(true);
+        }
+
+        collectedBranches.Clear(); // Clear the list after resetting
+
+        Debug.Log("Game Reset: Branches Restored");
+    }
+
     private void GameOver()
     {
         Debug.Log("Game Over!");
         AudioManager.Instance.PlaySFX(gameOverSound);
+        // Reset Branch Count
+        branchCount = 0;
+
+        // Reactivate all hidden branches
+        foreach (GameObject branch in collectedBranches)
+        {
+            branch.SetActive(true);
+        }
+        collectedBranches.Clear(); // Clear the list so it doesn't keep growing
+
     }
 
     private void BounceAway(Collision2D collision, float force)
@@ -403,7 +431,7 @@ public class Movement : MonoBehaviour
         branchCount++;
         Debug.Log("Branches Collected: " + branchCount);
         branch.SetActive(false); // Deactivate instead of destroying immediately
-        Destroy(branch, 0.1f);
+        collectedBranches.Add(branch);
     }
 
     public void Scare()

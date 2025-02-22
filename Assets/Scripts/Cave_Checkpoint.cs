@@ -63,6 +63,7 @@ public class Cave_Checkpoint : MonoBehaviour
         playerRb.simulated = true;
 
         player.ResetHealth(); // Restore health
+        player.ResetGame(); // Restore branches
 
         if (deathText != null)
             deathText.gameObject.SetActive(false); // Hide text after respawn
