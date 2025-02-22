@@ -73,6 +73,7 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
+        
         UpdateDamageOverlay();
 
         float moveSpeed = speed;
@@ -273,6 +274,14 @@ public class Movement : MonoBehaviour
         {
             float force = collision.gameObject.CompareTag("Enemy") ? bounceForce : hazardBounceForce;
             TakeDamage(collision, force);
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            grounded = false;
         }
     }
 
