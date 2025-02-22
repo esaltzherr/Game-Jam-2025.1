@@ -33,7 +33,7 @@ public class Movement : MonoBehaviour
     private float slideTimer = 0f;
 
     public bool TimerOn = false;
-    private int health;
+    public int health;
     private float healTimer;
 
     private bool isInvincible = false;
@@ -61,9 +61,6 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
-
-
-
         UpdateDamageOverlay();
 
         float moveSpeed = speed;
@@ -308,11 +305,19 @@ public class Movement : MonoBehaviour
             alpha = 0f;
         }
         else if (health == 2)
-            alpha = 0.2f; // Light red
+            alpha = 0.1f; // Light red
         else if (health == 1)
-            alpha = 0.6f; // Strong red
+            alpha = 0.3f; // Strong red
+        else if (health <= 0)
+            alpha = 1f; // Stronger red
 
         damageOverlay.color = new Color(1, 0, 0, alpha);
+    }
+
+    public void ResetHealth()
+    {
+        health = maxHealth;
+        Debug.Log("Health Reset!");
     }
 
     private void GameOver()
