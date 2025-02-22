@@ -1,20 +1,32 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
-using UnityEngine.UI; // Import UI library
 
 public class Cave_Checkpoint : MonoBehaviour
 {
     private Vector2 checkpointPos;
     private Movement player;
-    public Text deathText; // Reference to UI text
+    private int branchCount; // Track branches collected
+
+    public Text deathText; // UI text for death message
+    public Image fadeScreen; // UI Image for fade to black effect
+    public GameObject winMessage; // Win message (Text/Image)
+
+    private bool gameWon = false;
 
     void Start()
     {
         checkpointPos = transform.position; // Initial spawn point
-        player = FindObjectOfType<Movement>(); // Find the player
+        player = FindObjectOfType<Movement>();
 
         if (deathText != null)
-            deathText.gameObject.SetActive(false); // Hide text at start
+            deathText.gameObject.SetActive(false); // Hide death message
+
+        if (fadeScreen != null)
+            fadeScreen.color = new Color(0, 0, 0, 0); // Transparent at start
+
+        if (winMessage != null)
+            winMessage.SetActive(false); // Hide win message initially
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -23,6 +35,11 @@ public class Cave_Checkpoint : MonoBehaviour
         {
             checkpointPos = collision.transform.position;
             checkpointPos.y += 3; // Move checkpoint up
+
+            if (player.branchCount >= 3) // Win condition
+            {
+                StartCoroutine(WinGame());
+            }
         }
     }
 
@@ -57,5 +74,31 @@ public class Cave_Checkpoint : MonoBehaviour
         {
             StartCoroutine(Respawn(2f)); // Respawn after 2 seconds
         }
+    }
+
+    IEnumerator WinGame()
+    {
+        if (gameWon) yield break; // Prevent multiple triggers
+        gameWon = true;
+
+        Debug.Log("Game Won!");
+
+        float fadeDuration = 2f;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < fadeDuration)
+        {
+            fadeScreen.color = new Color(0, 0, 0, elapsedTime / fadeDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        fadeScreen.color = new Color(0, 0, 0, 1); // Fully black
+
+        if (winMessage != null)
+            winMessage.SetActive(true); // Show win message
+
+        yield return new WaitForSeconds(3f);
+        Debug.Log("Game Ended!");
     }
 }

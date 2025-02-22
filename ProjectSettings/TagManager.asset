@@ -9,6 +9,7 @@ TagManager:
   - Home
   - Hazard
   - Checkpoint
+  - Wood
   layers:
   - Default
   - TransparentFX

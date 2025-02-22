@@ -41,6 +41,8 @@ public class Movement : MonoBehaviour
     private float scareRadius = 3;
     private string facing = "Left";
 
+    public int branchCount = 0;
+
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
@@ -247,6 +249,14 @@ public class Movement : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Wood"))
+        {
+            CollectBranch(other.gameObject); // Remove collected branch
+        }
+    }
+
     private void TakeDamage(Collision2D collision, float force)
     {
         if (isInvincible) return; // Prevent multiple hits
@@ -343,7 +353,15 @@ public class Movement : MonoBehaviour
         bounceTimer = bounceDuration;
     }
 
+    private void CollectBranch(GameObject branch)
+    {
+        if (!branch.activeSelf) return; // Prevent multiple counts
 
+        branchCount++;
+        Debug.Log("Branches Collected: " + branchCount);
+        branch.SetActive(false); // Deactivate instead of destroying immediately
+        Destroy(branch, 0.1f); 
+    }
 
     public void Scare()
     {
