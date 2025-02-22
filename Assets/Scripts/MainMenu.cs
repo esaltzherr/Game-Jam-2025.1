@@ -8,8 +8,10 @@ public class MainMenu : MonoBehaviour
     // public string SceneToStart;
     // public GameObject OptionsMenuObject;
     // public GameObject MainMenuObject;
+    public AudioClip UIClickSound;
     public void StartGame(string Scene)
     {
+        AudioManager.Instance.PlaySFX(UIClickSound);
         Debug.Log("Starting Game");
         SceneManager.LoadScene(Scene);
     }

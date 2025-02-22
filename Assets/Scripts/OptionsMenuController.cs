@@ -9,6 +9,7 @@ public class OptionsMenuController : MonoBehaviour
     public Slider masterSlider;
     public Slider musicSlider;
     public Slider sfxSlider;
+    public AudioClip UIClickSound;
     void Start()
     {
         // Get the Canvas component on the same GameObject
@@ -48,6 +49,7 @@ public class OptionsMenuController : MonoBehaviour
 
     public void ExitToMain(string Scene)
     {
+        AudioManager.Instance.PlaySFX(UIClickSound);
         Debug.Log("Going back to main menu");
         SceneManager.LoadScene(Scene);
     }

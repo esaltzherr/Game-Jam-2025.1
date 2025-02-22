@@ -957,6 +957,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5865ccdfebe9b174f8e52ead3c9602d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UIClickSound: {fileID: 8300000, guid: 0902c887fe2eaa84d9317ce0febf6988, type: 3}
 --- !u!1 &715272744
 GameObject:
   m_ObjectHideFlags: 0
@@ -1361,7 +1362,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sfxSlider: {fileID: 904565132}
   testSounds:
-  - {fileID: 8300000, guid: 3c0c6811a628302409359eefa8760fcb, type: 3}
+  - {fileID: 8300000, guid: fefb29fba76a3214ea570c395beb92bf, type: 3}
   cooldownTime: 0.5
 --- !u!1 &1014025001
 GameObject:
