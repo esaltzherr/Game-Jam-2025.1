@@ -40,7 +40,16 @@ public class Movement : MonoBehaviour
 
     private float scareRadius = 3;
     private string facing = "Left";
+    Animator animator;
 
+    private float walkSoundCooldown = 0.5f;  // Adjust as needed
+    private float nextWalkSoundTime = 0f;
+
+    public AudioClip[] walkSounds;
+    public AudioClip[] jumpSounds;
+    public AudioClip[] damageSounds;
+    public AudioClip[] scareSounds;
+    public AudioClip gameOverSound;
     public int branchCount = 0;
 
     private void Awake()
@@ -59,6 +68,7 @@ public class Movement : MonoBehaviour
         {
             damageOverlay.color = new Color(1, 0, 0, 0); // Fully transparent at start
         }
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -209,6 +219,18 @@ public class Movement : MonoBehaviour
             }
         }
 
+        float currentSpeed = Mathf.Abs(body.velocity.x);
+        animator.SetFloat("Movespeed", currentSpeed);
+
+        if (currentSpeed > 0 && Time.time >= nextWalkSoundTime)
+        {
+            if (walkSounds != null && walkSounds.Length > 0)
+            {
+                int randomIndex = Random.Range(0, walkSounds.Length);
+                AudioManager.Instance.PlaySFX(walkSounds[randomIndex]);
+                nextWalkSoundTime = Time.time + walkSoundCooldown;
+            }
+        }
 
 
     }
@@ -218,6 +240,11 @@ public class Movement : MonoBehaviour
         Debug.Log("Jumping");
         body.linearVelocity = new Vector2(body.linearVelocity.x, jump);
         grounded = false;
+        if (jumpSounds != null && jumpSounds.Length > 0)
+        {
+            int randomIndex = Random.Range(0, jumpSounds.Length);
+            AudioManager.Instance.PlaySFX(jumpSounds[randomIndex]);
+        }
     }
 
     private void StartSlide()
@@ -263,6 +290,12 @@ public class Movement : MonoBehaviour
 
         health--;
         Debug.Log("Health: " + health);
+
+        if (damageSounds != null && damageSounds.Length > 0)
+        {
+            int randomIndex = Random.Range(0, damageSounds.Length);
+            AudioManager.Instance.PlaySFX(damageSounds[randomIndex]);
+        }
 
         if (health <= 0)
         {
@@ -333,6 +366,7 @@ public class Movement : MonoBehaviour
     private void GameOver()
     {
         Debug.Log("Game Over!");
+        AudioManager.Instance.PlaySFX(gameOverSound);
     }
 
     private void BounceAway(Collision2D collision, float force)
@@ -360,11 +394,18 @@ public class Movement : MonoBehaviour
         branchCount++;
         Debug.Log("Branches Collected: " + branchCount);
         branch.SetActive(false); // Deactivate instead of destroying immediately
-        Destroy(branch, 0.1f); 
+        Destroy(branch, 0.1f);
     }
 
     public void Scare()
     {
+        animator.SetTrigger("Attack");
+        if (scareSounds != null && scareSounds.Length > 0)
+        {
+            int randomIndex = Random.Range(0, scareSounds.Length);
+            AudioManager.Instance.PlaySFX(scareSounds[randomIndex]);
+        }
+
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, scareRadius);
 
         foreach (Collider2D enemy in hitEnemies)

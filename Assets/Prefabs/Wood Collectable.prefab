@@ -147,3 +147,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aba1dfe24c4460244a37176480950477, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collectWood: {fileID: 8300000, guid: 578265e976e90a1448aa22b8539d69d5, type: 3}

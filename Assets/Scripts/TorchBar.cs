@@ -7,6 +7,7 @@ public class TorchBar : MonoBehaviour
     public float maxTorchTime = 60f; // Maximum torch duration in seconds
     private float currentTorchTime;
     private bool filling = false;
+    public Animator playerAnimator;
     void Start()
     {
         currentTorchTime = maxTorchTime;
@@ -19,6 +20,7 @@ public class TorchBar : MonoBehaviour
         {
             Debug.LogError("TorchBar: No Slider assigned!");
         }
+        
     }
 
     void Update()
@@ -32,6 +34,14 @@ public class TorchBar : MonoBehaviour
             currentTorchTime -= Time.deltaTime; 
         }
         torchSlider.value = currentTorchTime;
+        if (currentTorchTime > 0){
+            playerAnimator.SetBool("Lit", true);
+
+        }
+        else{
+            playerAnimator.SetBool("Lit", false);
+
+        }
     }
 
     public void enableFilling(){
