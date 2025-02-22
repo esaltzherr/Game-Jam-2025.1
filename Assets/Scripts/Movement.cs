@@ -36,7 +36,10 @@ public class Movement : MonoBehaviour
     private int health;
     private float healTimer;
 
+    private bool isInvincible = false;
+
     private float scareRadius = 3;
+
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
@@ -189,34 +192,50 @@ public class Movement : MonoBehaviour
         {
             grounded = true;
         }
-        else if (collision.gameObject.CompareTag("Enemy"))
+        else if ((collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Hazard")) && !isInvincible)
         {
-            TakeDamage(collision, bounceForce);
-        }
-        else if (collision.gameObject.CompareTag("Hazard"))
-        {
-            TakeDamage(collision, hazardBounceForce);
+            float force = collision.gameObject.CompareTag("Enemy") ? bounceForce : hazardBounceForce;
+            TakeDamage(collision, force);
         }
     }
 
     private void TakeDamage(Collision2D collision, float force)
     {
+        if (isInvincible) return; // Prevent multiple hits
+
         health--;
         Debug.Log("Health: " + health);
+    
         if (health <= 0)
         {
             GameOver();
             return;
         }
 
-        // Reset heal timer
         healTimer = healCooldown;
 
-        // Flash red briefly
         StartCoroutine(FlashDamageEffect());
+        StartCoroutine(InvincibilityFrames()); 
 
-        // Knockback effect
         BounceAway(collision, force);
+    }
+
+    private IEnumerator InvincibilityFrames()
+    {
+        isInvincible = true;
+        float invincibilityDuration = 1.5f; // Adjust time as needed
+        float blinkInterval = 0.2f;
+
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+
+        for (float t = 0; t < invincibilityDuration; t += blinkInterval)
+        {
+            spriteRenderer.enabled = !spriteRenderer.enabled; // Toggle visibility
+            yield return new WaitForSeconds(blinkInterval);
+        }
+
+        spriteRenderer.enabled = true; // Ensure visibility at the end
+        isInvincible = false;
     }
 
     private IEnumerator FlashDamageEffect()
