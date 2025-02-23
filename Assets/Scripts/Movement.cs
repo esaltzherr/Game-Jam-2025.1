@@ -55,8 +55,9 @@ public class Movement : MonoBehaviour
     public TorchBar torchBar; // Assign this via the Inspector or find it at runtime
 
     public int branchCount = 0;
-    private int checkpointBranchCount = 0;
-    private List<GameObject> collectedBranches = new List<GameObject>();
+    private int savedBranchCount = 0; // Saved branch count after checkpoint
+    private List<GameObject> collectedBranches = new List<GameObject>(); // Stores the branches that have been collected
+    private List<Vector3> collectedBranchPositions = new List<Vector3>(); // Stores the positions of collected branches
     private List<GameObject> checkpointBranches = new List<GameObject>(); // Stores non-reset branches
 
     private void Awake()
@@ -373,33 +374,35 @@ public class Movement : MonoBehaviour
 
     public void ResetGame()
     {
-        if (checkpointBranchCount > 0) // If the player reached a checkpoint
+        if (savedBranchCount > 0) // If a checkpoint was reached, restore the branch count
         {
-            branchCount = checkpointBranchCount; // Restore saved branch count
-            collectedBranches = new List<GameObject>(checkpointBranches); // Keep checkpoint branches
+            branchCount = savedBranchCount; // Restore branch count to the saved value
         }
         else
         {
             branchCount = 0; // Reset everything if no checkpoint was reached
-            foreach (GameObject branch in collectedBranches)
-            {
-                branch.SetActive(true); // Restore all collected branches
-            }
-            collectedBranches.Clear();
         }
+
+        // Reactivate all collected branches when restarting after death or game reset
+        foreach (GameObject branch in collectedBranches)
+        {
+            branch.SetActive(true);
+        }
+        collectedBranches.Clear(); // Clear collected branches list after they are reactivated
+
+        // Reset branch positions list
+        collectedBranchPositions.Clear();
 
         Debug.Log("Game Reset: Branch Count = " + branchCount);
     }
 
     private void ReachCheckpoint()
     {
-        checkpointBranchCount = branchCount; // Save branch count at checkpoint
+        savedBranchCount = branchCount; // Save branch count at checkpoint
 
-        // Save branches collected at checkpoint
-        checkpointBranches.Clear();
-        checkpointBranches.AddRange(collectedBranches);
+        collectedBranches.Clear();
 
-        Debug.Log("Checkpoint reached! Saved Branch Count: " + checkpointBranchCount);
+        Debug.Log("Checkpoint Reached! Saved Branch Count: " + savedBranchCount);
     }
 
     private void GameOver()
@@ -407,7 +410,7 @@ public class Movement : MonoBehaviour
         Debug.Log("Game Over!");
         AudioManager.Instance.PlaySFX(gameOverSound);
         // Reset Branch Count
-        branchCount = 0;
+        branchCount = savedBranchCount;
 
         // Reactivate all hidden branches
         foreach (GameObject branch in collectedBranches)
@@ -448,10 +451,13 @@ public class Movement : MonoBehaviour
         if (!branch.activeSelf) return; // Prevent multiple counts
 
         branchCount++;
+        collectedBranchPositions.Add(branch.transform.position);
         Debug.Log("Branches Collected: " + branchCount);
         branch.SetActive(false); // Deactivate instead of destroying immediately
         collectedBranches.Add(branch);
     }
+
+
 
     public void Scare()
     {
