@@ -53,7 +53,9 @@ public class Movement : MonoBehaviour
     public AudioClip gameOverSound;
 
     public int branchCount = 0;
+    private int checkpointBranchCount = 0;
     private List<GameObject> collectedBranches = new List<GameObject>();
+    private List<GameObject> checkpointBranches = new List<GameObject>(); // Stores non-reset branches
 
     private void Awake()
     {
@@ -287,6 +289,10 @@ public class Movement : MonoBehaviour
         {
             CollectBranch(other.gameObject); // Remove collected branch
         }
+        if (other.CompareTag("Checkpoint"))
+        {
+            ReachCheckpoint();
+        }
     }
 
     private void TakeDamage(Collision2D collision, float force)
@@ -370,17 +376,33 @@ public class Movement : MonoBehaviour
 
     public void ResetGame()
     {
-        branchCount = 0; // Reset branch count
-
-        // Reactivate all collected branches
-        foreach (GameObject branch in collectedBranches)
+        if (checkpointBranchCount > 0) // If the player reached a checkpoint
         {
-            branch.SetActive(true);
+            branchCount = checkpointBranchCount; // Restore saved branch count
+            collectedBranches = new List<GameObject>(checkpointBranches); // Keep checkpoint branches
         }
+        else
+        {
+            branchCount = 0; // Reset everything if no checkpoint was reached
+            foreach (GameObject branch in collectedBranches)
+            {
+                branch.SetActive(true); // Restore all collected branches
+            }
+            collectedBranches.Clear();
+    }
 
-        collectedBranches.Clear(); // Clear the list after resetting
+    Debug.Log("Game Reset: Branch Count = " + branchCount);
+    }
 
-        Debug.Log("Game Reset: Branches Restored");
+    private void ReachCheckpoint()
+    {
+        checkpointBranchCount = branchCount; // Save branch count at checkpoint
+
+        // Save branches collected at checkpoint
+        checkpointBranches.Clear();
+        checkpointBranches.AddRange(collectedBranches); 
+
+        Debug.Log("Checkpoint reached! Saved Branch Count: " + checkpointBranchCount);
     }
 
     private void GameOver()
