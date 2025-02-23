@@ -110,6 +110,10 @@ MonoBehaviour:
   bounceForce: 10
   maxChaseDistance: 5
   raycastRange: 5
+  flapSounds:
+  - {fileID: 8300000, guid: 6966fec3040d57d47b36d5eb1b5b0454, type: 3}
+  - {fileID: 8300000, guid: fdec844592600ce46b49b4eb8195deb8, type: 3}
+  cooldownDuration: 0.6
 --- !u!50 &7836344397346603064
 Rigidbody2D:
   serializedVersion: 5
