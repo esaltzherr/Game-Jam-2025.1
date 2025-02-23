@@ -301,15 +301,10 @@ public class Movement : MonoBehaviour
     {
         if (isInvincible) return; // Prevent multiple hits
 
+        Debug.Log("TakeDamage called! Collision with: " + collision.gameObject.name);
+        Debug.Log("Bounce force applied: " + force);
+
         health--;
-        Debug.Log("Health: " + health);
-
-        if (damageSounds != null && damageSounds.Length > 0)
-        {
-            int randomIndex = Random.Range(0, damageSounds.Length);
-            AudioManager.Instance.PlaySFX(damageSounds[randomIndex]);
-        }
-
         if (health <= 0)
         {
             GameOver();
@@ -321,7 +316,7 @@ public class Movement : MonoBehaviour
         StartCoroutine(FlashDamageEffect());
         StartCoroutine(InvincibilityFrames());
 
-        BounceAway(collision, force);
+        BounceAway(collision, force);  // Make sure this is running!
     }
 
     private IEnumerator InvincibilityFrames()
@@ -425,21 +420,28 @@ public class Movement : MonoBehaviour
 
     private void BounceAway(Collision2D collision, float force)
     {
+        Debug.Log("BounceAway called! Collided with: " + collision.gameObject.name);
+
         Vector2 bounceDirection = (body.position - (Vector2)collision.transform.position).normalized;
+        Debug.Log("Initial bounce direction: " + bounceDirection);
 
         // Ensure the bounce is mostly upwards
         if (bounceDirection.y < 0.3f)
         {
-
-            bounceDirection.y = 0.75f; // Ensure a reasonable upwards push
+            bounceDirection.y = 0.75f; // Ensure an upwards push
         }
         bounceDirection.Normalize();
 
-        body.linearVelocity = bounceDirection * force; // Directly set velocity instead of using AddForce
+        Debug.Log("Final bounce direction: " + bounceDirection);
+        
+        // Apply bounce using AddForce instead of linearVelocity
+        body.linearVelocity = Vector2.zero;  // Reset velocity before applying force
+        body.AddForce(bounceDirection * force, ForceMode2D.Impulse);
 
         isBouncing = true;
         bounceTimer = bounceDuration;
     }
+
 
     private void CollectBranch(GameObject branch)
     {
