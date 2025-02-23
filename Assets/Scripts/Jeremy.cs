@@ -7,7 +7,8 @@ public class Jeremy : MonoBehaviour
 
     private Rigidbody2D rb;
     public AudioClip screech;
-    
+    public Transform startingPos; // Corrected type
+
     // Updated references to the correct script classes
     public Movement movement;
     public Cave_Checkpoint cavecheckpoint;
@@ -37,6 +38,8 @@ public class Jeremy : MonoBehaviour
             Debug.Log("Player touched!");
             movement.health = 0;
             cavecheckpoint.Setjermy(true);
+            // Move Jeremy back to its starting position
+            transform.position = startingPos.position;
         }
     }
 
