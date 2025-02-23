@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Audio;
+using System.Collections;
 
 public class AudioManager : MonoBehaviour
 {
@@ -37,12 +38,11 @@ public class AudioManager : MonoBehaviour
 
     public void PlayMusic(AudioClip clip)
     {
-        if (musicSource.clip != clip)
+        if (musicSource.clip == clip && musicSource.isPlaying)
         {
-            musicSource.clip = clip;
-            musicSource.loop = true;
-            musicSource.Play();
+            return;
         }
+        StartCoroutine(CrossfadeMusic(clip, 0.5f));
     }
 
     public void PlaySFX(AudioClip clip)
@@ -62,6 +62,32 @@ public class AudioManager : MonoBehaviour
     public void StopAmbient()
     {
         ambientSource.Stop();
+    }
+
+
+
+    public IEnumerator CrossfadeMusic(AudioClip newClip, float fadeDuration)
+    {
+        // Fade out current music
+        float startVolume = musicSource.volume;
+        for (float t = 0; t < fadeDuration; t += Time.deltaTime)
+        {
+            musicSource.volume = Mathf.Lerp(startVolume, 0f, t / fadeDuration);
+            yield return null;
+        }
+        musicSource.Stop();
+
+        // Switch to new clip
+        musicSource.clip = newClip;
+        musicSource.Play();
+
+        // Fade in new music
+        for (float t = 0; t < fadeDuration; t += Time.deltaTime)
+        {
+            musicSource.volume = Mathf.Lerp(0f, startVolume, t / fadeDuration);
+            yield return null;
+        }
+        musicSource.volume = startVolume;
     }
 
 }

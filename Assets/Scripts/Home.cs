@@ -40,7 +40,7 @@ public class Home : MonoBehaviour
 
             if (globalLight != null)
             {
-                globalLight.intensity = 1f;
+                globalLight.intensity = 0.5f;
             }
             torchActivated = true;
         }
