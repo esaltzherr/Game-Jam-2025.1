@@ -35,11 +35,12 @@ public class Jeremy : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            transform.position = startingPos.position;
             Debug.Log("Player touched!");
             movement.health = 0;
             cavecheckpoint.Setjermy(true);
             // Move Jeremy back to its starting position
-            transform.position = startingPos.position;
+            
         }
     }
 

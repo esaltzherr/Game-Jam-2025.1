@@ -84,6 +84,7 @@ public class Cave_Checkpoint : MonoBehaviour
 
         if (loseMessage != null)
             loseMessage.SetActive(false); // Hide text after respawn
+            loseMessage2.SetActive(false);
     }
 
     void Update()
