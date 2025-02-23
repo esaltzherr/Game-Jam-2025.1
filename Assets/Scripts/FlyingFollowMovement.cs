@@ -59,8 +59,22 @@ public class FlyingFollowMovement : MonoBehaviour
         Vector2 direction = (targetPosition - rb.position).normalized;
         rb.linearVelocity = direction * currentSpeed;
 
+        Vector3 scale = transform.localScale;
+        if (rb.linearVelocity.x < 0)
+        {
+            // Facing right, ensure x scale is positive.
+            scale.x = Mathf.Abs(scale.x);
+        }
+        else if (rb.linearVelocity.x > 0)
+        {
+            // Facing left, flip the x scale.
+            scale.x = -Mathf.Abs(scale.x);
+        }
+        transform.localScale = scale;
 
-       if (rb.linearVelocity.sqrMagnitude > 0.01f)
+
+
+        if (rb.linearVelocity.sqrMagnitude > 0.01f)
         {
             // Only play sound if the cooldown period has passed
             if (Time.time >= nextSoundTime)
@@ -70,7 +84,7 @@ public class FlyingFollowMovement : MonoBehaviour
                     // Select a random sound from the array
                     AudioClip clip = flapSounds[Random.Range(0, flapSounds.Length)];
                     AudioManager.Instance.PlaySFX(clip);
-                    
+
                     // Set the next allowed time to play a sound
                     nextSoundTime = Time.time + cooldownDuration;
                 }
@@ -132,7 +146,7 @@ public class FlyingFollowMovement : MonoBehaviour
     }
 
     public void Scared(Transform player)
-    {   
+    {
         Debug.Log("GETTIN SPOOKED");
         Vector2 bounceDirection = (rb.position - (Vector2)player.transform.position).normalized;
         rb.linearVelocity = bounceDirection * bounceForce;
