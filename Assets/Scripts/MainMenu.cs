@@ -9,11 +9,13 @@ public class MainMenu : MonoBehaviour
     // public GameObject OptionsMenuObject;
     // public GameObject MainMenuObject;
     public AudioClip UIClickSound;
+    public AudioClip gentleMusic;
     public void StartGame(string Scene)
     {
         AudioManager.Instance.PlaySFX(UIClickSound);
         Debug.Log("Starting Game");
         SceneManager.LoadScene(Scene);
+        AudioManager.Instance.PlayMusic(gentleMusic);
     }
 
     // public void GoToOptions(){
