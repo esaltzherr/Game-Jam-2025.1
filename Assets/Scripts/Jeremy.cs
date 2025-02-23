@@ -7,6 +7,10 @@ public class Jeremy : MonoBehaviour
 
     private Rigidbody2D rb;
     public AudioClip screech;
+    
+    // Updated references to the correct script classes
+    public Movement movement;
+    public Cave_Checkpoint cavecheckpoint;
 
     void Start()
     {
@@ -31,6 +35,16 @@ public class Jeremy : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("Player touched!");
+            movement.health = 0;
+            cavecheckpoint.Setjermy(true);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            cavecheckpoint.Setjermy(false);
         }
     }
 }

@@ -14,6 +14,7 @@ public class Cave_Checkpoint : MonoBehaviour
     public GameObject winMessage; // Win message (Text/Image)
 
     private bool gameWon = false;
+    bool diedToJermy = false;
 
     void Start()
     {
@@ -22,10 +23,10 @@ public class Cave_Checkpoint : MonoBehaviour
 
         if (loseMessage != null)
             loseMessage.SetActive(false);
-        
+
         if (loseMessage2 != null)
             loseMessage2.SetActive(false);
-       
+
 
         if (fadeScreen != null)
             fadeScreen.color = new Color(0, 0, 0, 0); // Transparent at start
@@ -47,11 +48,22 @@ public class Cave_Checkpoint : MonoBehaviour
             }
         }
     }
+    public void Setjermy(bool deadTo){
+        diedToJermy = deadTo;
+    }
 
-    IEnumerator Respawn(float duration)
+    IEnumerator Respawn(float duration, bool diedToJermy)
     {
-        if (loseMessage != null)
-            loseMessage.SetActive(true); // Show text when player dies
+        if (diedToJermy)
+        {
+            loseMessage2.SetActive(true);
+        }
+        else
+        {
+            if (loseMessage != null)
+                loseMessage.SetActive(true); // Show text when player dies
+        }
+
 
         Debug.Log("Respawning...");
 
@@ -78,8 +90,9 @@ public class Cave_Checkpoint : MonoBehaviour
     {
         if (player != null && player.health <= 0)
         {
-            StartCoroutine(Respawn(2f)); // Respawn after 2 seconds
+            StartCoroutine(Respawn(2f, diedToJermy)); // Respawn after 2 seconds
         }
+
     }
 
     IEnumerator WinGame()

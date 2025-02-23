@@ -464,7 +464,7 @@ public class Movement : MonoBehaviour
             return;
         }
 
-        if (torchBar.GetTorchPercentage() < 0.1f)
+        if (torchBar.GetTorchPercentage() < 0.01f)
         {
             return;
         }

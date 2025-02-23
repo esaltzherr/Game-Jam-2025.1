@@ -20,6 +20,13 @@ public class CollectibleCounter : MonoBehaviour
             UpdateText();
         }
     }
+    public void SetCollectable(int setTo)
+    {
+        
+        currentCollectibles = setTo;
+        UpdateText();
+        
+    }
 
     private void UpdateText()
     {
