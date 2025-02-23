@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 3643050211366897296, guid: 63e9e6c476fb3004b955d09dfb820548, type: 3}
-  m_Color: {r: 0.030215396, g: 0.9150943, b: 0.13527565, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -106,9 +106,9 @@ MonoBehaviour:
   Target: {fileID: 0}
   speed: 2
   distance: 3
-  slowSpeed: 2
+  slowSpeed: 1
   bounceForce: 10
-  maxChaseDistance: 5
+  maxChaseDistance: 6
   raycastRange: 5
   flapSounds:
   - {fileID: 8300000, guid: 6966fec3040d57d47b36d5eb1b5b0454, type: 3}

@@ -8,7 +8,8 @@ public class Cave_Checkpoint : MonoBehaviour
     private Movement player;
     private int branchCount; // Track branches collected
 
-    public Text deathText; // UI text for death message
+    public GameObject loseMessage; // UI text for death message
+    public GameObject loseMessage2; // UI text for death message
     public Image fadeScreen; // UI Image for fade to black effect
     public GameObject winMessage; // Win message (Text/Image)
 
@@ -19,8 +20,12 @@ public class Cave_Checkpoint : MonoBehaviour
         checkpointPos = transform.position; // Initial spawn point
         player = FindObjectOfType<Movement>();
 
-        if (deathText != null)
-            deathText.gameObject.SetActive(false); // Hide death message
+        if (loseMessage != null)
+            loseMessage.SetActive(false);
+        
+        if (loseMessage2 != null)
+            loseMessage2.SetActive(false);
+       
 
         if (fadeScreen != null)
             fadeScreen.color = new Color(0, 0, 0, 0); // Transparent at start
@@ -45,8 +50,8 @@ public class Cave_Checkpoint : MonoBehaviour
 
     IEnumerator Respawn(float duration)
     {
-        if (deathText != null)
-            deathText.gameObject.SetActive(true); // Show text when player dies
+        if (loseMessage != null)
+            loseMessage.SetActive(true); // Show text when player dies
 
         Debug.Log("Respawning...");
 
@@ -65,8 +70,8 @@ public class Cave_Checkpoint : MonoBehaviour
         player.ResetHealth(); // Restore health
         player.ResetGame(); // Restore branches
 
-        if (deathText != null)
-            deathText.gameObject.SetActive(false); // Hide text after respawn
+        if (loseMessage != null)
+            loseMessage.SetActive(false); // Hide text after respawn
     }
 
     void Update()

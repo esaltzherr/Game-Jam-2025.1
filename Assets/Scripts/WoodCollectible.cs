@@ -12,7 +12,7 @@ public class WoodCollectible : MonoBehaviour
             {
                 counter.IncrementCollectibles();
             }
-            Destroy(gameObject); // Remove the wood collectible from the scene
+            // Destroy(gameObject); // Remove the wood collectible from the scene
             AudioManager.Instance.PlaySFX(collectWood);
         }
     }

@@ -52,6 +52,8 @@ public class Movement : MonoBehaviour
     public AudioClip[] scareSounds;
     public AudioClip gameOverSound;
 
+    public TorchBar torchBar; // Assign this via the Inspector or find it at runtime
+
     public int branchCount = 0;
     private int checkpointBranchCount = 0;
     private List<GameObject> collectedBranches = new List<GameObject>();
@@ -78,7 +80,7 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
-        
+
         UpdateDamageOverlay();
 
         float moveSpeed = speed;
@@ -252,7 +254,7 @@ public class Movement : MonoBehaviour
         Debug.Log("Sliding!");
 
         body.linearVelocity = new Vector2(body.linearVelocity.x * slideSpeedMultiplier, body.linearVelocity.y);
-        
+
         // Adjust scale but keep facing direction
         float currentX = (facing == "Right") ? Mathf.Abs(originalScale.x) : -Mathf.Abs(originalScale.x);
         transform.localScale = new Vector3(currentX, shrinkScaleY, originalScale.z);
@@ -386,9 +388,9 @@ public class Movement : MonoBehaviour
                 branch.SetActive(true); // Restore all collected branches
             }
             collectedBranches.Clear();
-    }
+        }
 
-    Debug.Log("Game Reset: Branch Count = " + branchCount);
+        Debug.Log("Game Reset: Branch Count = " + branchCount);
     }
 
     private void ReachCheckpoint()
@@ -397,7 +399,7 @@ public class Movement : MonoBehaviour
 
         // Save branches collected at checkpoint
         checkpointBranches.Clear();
-        checkpointBranches.AddRange(collectedBranches); 
+        checkpointBranches.AddRange(collectedBranches);
 
         Debug.Log("Checkpoint reached! Saved Branch Count: " + checkpointBranchCount);
     }
@@ -433,7 +435,7 @@ public class Movement : MonoBehaviour
         bounceDirection.Normalize();
 
         Debug.Log("Final bounce direction: " + bounceDirection);
-        
+
         // Apply bounce using AddForce instead of linearVelocity
         body.linearVelocity = Vector2.zero;  // Reset velocity before applying force
         body.AddForce(bounceDirection * force, ForceMode2D.Impulse);
@@ -455,6 +457,17 @@ public class Movement : MonoBehaviour
 
     public void Scare()
     {
+        TorchBar torchBar = GetComponentInChildren<TorchBar>();
+        if (torchBar == null)
+        {
+            Debug.LogWarning("TorchBar not found!");
+            return;
+        }
+
+        if (torchBar.GetTorchPercentage() < 0.1f)
+        {
+            return;
+        }
         animator.SetTrigger("Attack");
         if (scareSounds != null && scareSounds.Length > 0)
         {
