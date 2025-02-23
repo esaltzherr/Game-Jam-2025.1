@@ -8,8 +8,8 @@ public class Home : MonoBehaviour
     public GameObject globalLightObject; // The GameObject that contains the Light2D component
 
     private Light2D globalLight;         // Reference to the Light2D component on the global light object
-    public AudioClip fireCrackling; 
-    public AudioClip exploreMusic; 
+    public AudioClip fireCrackling;
+    public AudioClip exploreMusic;
 
     // Boolean flag to ensure torch activation and light change only happen once
     private bool torchActivated = false;
@@ -32,6 +32,18 @@ public class Home : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        // Activate the torch, canvas, and change global light intensity only once
+        if (!torchActivated)
+        {
+            torch.SetActive(true);
+            torchCanvas.SetActive(true);
+
+            if (globalLight != null)
+            {
+                globalLight.intensity = 1f;
+            }
+            torchActivated = true;
+        }
         if (other.CompareTag("Player"))
         {
             // Always enable TorchBar filling
@@ -41,18 +53,7 @@ public class Home : MonoBehaviour
                 torchBar.enableFilling();
             }
 
-            // Activate the torch, canvas, and change global light intensity only once
-            if (!torchActivated)
-            {
-                torch.SetActive(true);
-                torchCanvas.SetActive(true);
 
-                if (globalLight != null)
-                {
-                    globalLight.intensity = 1f;
-                }
-                torchActivated = true;
-            }
         }
         AudioManager.Instance.PlayAmbient(fireCrackling);
     }
