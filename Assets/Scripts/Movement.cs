@@ -136,7 +136,7 @@ public class Movement : MonoBehaviour
         }
 
         // Sliding
-        if (running && Input.GetKeyDown(KeyCode.S))
+        if (running && (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && grounded)
         {
             StartSlide();
         }
@@ -152,20 +152,30 @@ public class Movement : MonoBehaviour
         }
 
         // Crouching logic (only if not sliding)
-        if (Input.GetKey(KeyCode.S) && grounded)
+        if ((Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) && grounded && !isSliding)
         {
             if (!isCrouching)
             {
                 isCrouching = true;
                 speed = crouchSpeed;
-                transform.localScale = new Vector3(originalScale.x, shrinkScaleY, originalScale.z);
+
+                // Preserve facing when resizing character
+                float currentX = (facing == "Right") ? Mathf.Abs(originalScale.x) : -Mathf.Abs(originalScale.x);
+                transform.localScale = new Vector3(currentX, shrinkScaleY, originalScale.z);
+
+                animator.SetBool("isCrouching", true); // Ensure animator is aware
             }
         }
-        else
+        else if (!isSliding) // Only reset if not sliding
         {
             isCrouching = false;
             speed = originalSpeed;
-            transform.localScale = new Vector3(originalScale.x, normalScaleY, originalScale.z);
+
+            // Preserve facing when resetting scale
+            float currentX = (facing == "Right") ? Mathf.Abs(originalScale.x) : -Mathf.Abs(originalScale.x);
+            transform.localScale = new Vector3(currentX, normalScaleY, originalScale.z);
+
+            animator.SetBool("isCrouching", false);
         }
 
         // Moving left/right
@@ -173,7 +183,7 @@ public class Movement : MonoBehaviour
         body.linearVelocity = new Vector2(moveInput * moveSpeed, body.linearVelocity.y);
 
         // Jumping
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)) && grounded && !isCrouching)
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) && grounded && !isCrouching)
         {
             Jump();
         }
@@ -181,26 +191,6 @@ public class Movement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             Scare();
-        }
-        // Crouching logic (only if not sliding)
-        if (Input.GetKey(KeyCode.S) && grounded)
-        {
-            if (!isCrouching)
-            {
-                isCrouching = true;
-                speed = crouchSpeed;
-                // When crouching, you might want to adjust Y scale but keep the facing:
-                float currentX = (facing == "Right") ? Mathf.Abs(originalScale.x) : -Mathf.Abs(originalScale.x);
-                transform.localScale = new Vector3(currentX, shrinkScaleY, originalScale.z);
-            }
-        }
-        else
-        {
-            isCrouching = false;
-            speed = originalSpeed;
-            // Preserve facing when resetting scale
-            float currentX = (facing == "Right") ? Mathf.Abs(originalScale.x) : -Mathf.Abs(originalScale.x);
-            transform.localScale = new Vector3(currentX, normalScaleY, originalScale.z);
         }
 
         // Later, update facing based on horizontal input:
@@ -255,18 +245,30 @@ public class Movement : MonoBehaviour
 
     private void StartSlide()
     {
+        if (isSliding) return; // Prevent multiple slides
+
         isSliding = true;
         slideTimer = slideDuration;
         Debug.Log("Sliding!");
 
         body.linearVelocity = new Vector2(body.linearVelocity.x * slideSpeedMultiplier, body.linearVelocity.y);
-        transform.localScale = new Vector3(originalScale.x, shrinkScaleY, originalScale.z);
+        
+        // Adjust scale but keep facing direction
+        float currentX = (facing == "Right") ? Mathf.Abs(originalScale.x) : -Mathf.Abs(originalScale.x);
+        transform.localScale = new Vector3(currentX, shrinkScaleY, originalScale.z);
+
+        animator.SetTrigger("Slide");
     }
 
     private void EndSlide()
     {
         isSliding = false;
-        transform.localScale = new Vector3(originalScale.x, normalScaleY, originalScale.z);
+
+        // Restore normal size while keeping facing direction
+        float currentX = (facing == "Right") ? Mathf.Abs(originalScale.x) : -Mathf.Abs(originalScale.x);
+        transform.localScale = new Vector3(currentX, normalScaleY, originalScale.z);
+
+        animator.ResetTrigger("Slide");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
