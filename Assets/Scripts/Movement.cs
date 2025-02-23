@@ -280,13 +280,6 @@ public class Movement : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            grounded = false;
-        }
-    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
