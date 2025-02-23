@@ -65,6 +65,19 @@ public class FollowMovement : MonoBehaviour
 
         Vector2 direction = (Target.transform.position - transform.position).normalized;
         rb.linearVelocity = new Vector2(direction.x * moveSpeed, rb.linearVelocity.y);
+
+        Vector3 scale = transform.localScale;
+        if (rb.linearVelocity.x < 0)
+        {
+            // Facing right, ensure x scale is positive.
+            scale.x = Mathf.Abs(scale.x);
+        }
+        else if (rb.linearVelocity.x > 0)
+        {
+            // Facing left, flip the x scale.
+            scale.x = -Mathf.Abs(scale.x);
+        }
+        transform.localScale = scale;
     }
 
     void Patrol()

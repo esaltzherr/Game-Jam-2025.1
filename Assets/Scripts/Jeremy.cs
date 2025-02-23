@@ -29,6 +29,19 @@ public class Jeremy : MonoBehaviour
         // Move towards the player continuously
         Vector2 direction = (Target.transform.position - transform.position).normalized;
         rb.linearVelocity = direction * speed;
+
+        Vector3 scale = transform.localScale;
+        if (rb.linearVelocity.x < 0)
+        {
+            // Facing right, ensure x scale is positive.
+            scale.x = Mathf.Abs(scale.x);
+        }
+        else if (rb.linearVelocity.x > 0)
+        {
+            // Facing left, flip the x scale.
+            scale.x = -Mathf.Abs(scale.x);
+        }
+        transform.localScale = scale;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
