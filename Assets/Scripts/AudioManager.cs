@@ -11,6 +11,8 @@ public class AudioManager : MonoBehaviour
     [Header("Audio Sources")]
     public AudioSource musicSource;
     public AudioSource sfxSource;
+    public AudioSource ambientSource;
+
 
     [Header("Audio Clips")]
     public AudioClip backgroundMusic;  // Assign this in the Inspector
@@ -47,4 +49,19 @@ public class AudioManager : MonoBehaviour
     {
         sfxSource.PlayOneShot(clip);
     }
+
+
+
+    public void PlayAmbient(AudioClip clip)
+    {
+        ambientSource.clip = clip;
+        ambientSource.loop = true;
+        ambientSource.Play();
+    }
+
+    public void StopAmbient()
+    {
+        ambientSource.Stop();
+    }
+
 }

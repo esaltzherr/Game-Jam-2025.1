@@ -6,6 +6,7 @@ public class Jeremy : MonoBehaviour
     [SerializeField] private float speed = 3f; // Movement speed
 
     private Rigidbody2D rb;
+    public AudioClip screech;
 
     void Start()
     {
@@ -13,6 +14,7 @@ public class Jeremy : MonoBehaviour
         rb.isKinematic = false;
         rb.gravityScale = 0;
         rb.freezeRotation = true;
+        AudioManager.Instance.PlaySFX(screech);
     }
 
     void Update()

@@ -20,7 +20,7 @@ public class TorchBar : MonoBehaviour
         {
             Debug.LogError("TorchBar: No Slider assigned!");
         }
-        
+        playerAnimator.SetBool("Lit", false);
     }
 
     void Update()
