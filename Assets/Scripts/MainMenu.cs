@@ -10,6 +10,7 @@ public class MainMenu : MonoBehaviour
     // public GameObject MainMenuObject;
     public AudioClip UIClickSound;
     public AudioClip gentleMusic;
+    public AudioClip MainMenuMusic;
     public void StartGame(string Scene)
     {
         AudioManager.Instance.PlaySFX(UIClickSound);
@@ -17,7 +18,11 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene(Scene);
         AudioManager.Instance.PlayMusic(gentleMusic);
     }
-
+    void Awake()
+    {
+        AudioManager.Instance.PlayMusic(MainMenuMusic);
+    
+    }
     // public void GoToOptions(){
     //     Debug.Log("Moving To Options Menu");
     //     MainMenuObject.SetActive(false);

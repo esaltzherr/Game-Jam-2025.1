@@ -10,6 +10,7 @@ public class OptionsMenuController : MonoBehaviour
     public Slider musicSlider;
     public Slider sfxSlider;
     public AudioClip UIClickSound;
+    public AudioClip MainMenuMusic;
     void Start()
     {
         // Get the Canvas component on the same GameObject
@@ -57,8 +58,11 @@ public class OptionsMenuController : MonoBehaviour
 
     public void ExitToMain(string Scene)
     {
+        Time.timeScale = 1; // Resume game time
         AudioManager.Instance.PlaySFX(UIClickSound);
+        
         Debug.Log("Going back to main menu");
         SceneManager.LoadScene(Scene);
+        AudioManager.Instance.PlayMusic(MainMenuMusic);
     }
 }

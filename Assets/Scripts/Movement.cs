@@ -51,7 +51,7 @@ public class Movement : MonoBehaviour
     public AudioClip[] damageSounds;
     public AudioClip[] scareSounds;
     public AudioClip gameOverSound;
-
+    public AudioClip collectWood;
     public TorchBar torchBar; // Assign this via the Inspector or find it at runtime
 
     public int branchCount = 0;
@@ -292,7 +292,7 @@ public class Movement : MonoBehaviour
         {
             CollectBranch(other.gameObject); // Remove collected branch
         }
-        if (other.CompareTag("Checkpoint"))
+        if (other.CompareTag("Home"))
         {
             ReachCheckpoint();
         }
@@ -357,11 +357,11 @@ public class Movement : MonoBehaviour
             alpha = 0f;
         }
         else if (health == 2)
-            alpha = 0.1f; // Light red
+            alpha = 0.05f; // Light red
         else if (health == 1)
-            alpha = 0.3f; // Strong red
+            alpha = 0.1f; // Strong red
         else if (health <= 0)
-            alpha = 1f; // Stronger red
+            alpha = 0.5f; // Stronger red
 
         damageOverlay.color = new Color(1, 0, 0, alpha);
     }
@@ -412,6 +412,13 @@ public class Movement : MonoBehaviour
         // Reset Branch Count
         branchCount = savedBranchCount;
 
+        CollectibleCounter counter = FindObjectOfType<CollectibleCounter>();
+        if (counter != null)
+        {
+            counter.SetCollectable(branchCount);
+        }
+
+
         // Reactivate all hidden branches
         foreach (GameObject branch in collectedBranches)
         {
@@ -449,7 +456,12 @@ public class Movement : MonoBehaviour
     private void CollectBranch(GameObject branch)
     {
         if (!branch.activeSelf) return; // Prevent multiple counts
-
+        AudioManager.Instance.PlaySFX(collectWood);
+        CollectibleCounter counter = FindObjectOfType<CollectibleCounter>();
+        if (counter != null)
+        {
+            counter.IncrementCollectibles();
+        }
         branchCount++;
         collectedBranchPositions.Add(branch.transform.position);
         Debug.Log("Branches Collected: " + branchCount);
@@ -480,7 +492,7 @@ public class Movement : MonoBehaviour
         }
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, scareRadius);
-        
+
         foreach (Collider2D enemy in hitEnemies)
         {
             Debug.Log("Detected: " + enemy.gameObject.name);
