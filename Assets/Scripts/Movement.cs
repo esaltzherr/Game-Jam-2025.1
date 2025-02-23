@@ -39,7 +39,7 @@ public class Movement : MonoBehaviour
 
     private bool isInvincible = false;
 
-    private float scareRadius = 3;
+    private float scareRadius = 5;
     private string facing = "Left";
     Animator animator;
 
@@ -165,7 +165,6 @@ public class Movement : MonoBehaviour
                 float currentX = (facing == "Right") ? Mathf.Abs(originalScale.x) : -Mathf.Abs(originalScale.x);
                 transform.localScale = new Vector3(currentX, shrinkScaleY, originalScale.z);
 
-                animator.SetBool("isCrouching", true); // Ensure animator is aware
             }
         }
         else if (!isSliding) // Only reset if not sliding
@@ -177,7 +176,6 @@ public class Movement : MonoBehaviour
             float currentX = (facing == "Right") ? Mathf.Abs(originalScale.x) : -Mathf.Abs(originalScale.x);
             transform.localScale = new Vector3(currentX, normalScaleY, originalScale.z);
 
-            animator.SetBool("isCrouching", false);
         }
 
         // Moving left/right
@@ -464,7 +462,7 @@ public class Movement : MonoBehaviour
             return;
         }
 
-        if (torchBar.GetTorchPercentage() < 0.01f)
+        if (torchBar.GetTorchNum() < 0.01f)
         {
             return;
         }
@@ -472,11 +470,11 @@ public class Movement : MonoBehaviour
         if (scareSounds != null && scareSounds.Length > 0)
         {
             int randomIndex = Random.Range(0, scareSounds.Length);
-            AudioManager.Instance.PlaySFX(scareSounds[randomIndex]);
+            // AudioManager.Instance.PlaySFX(scareSounds[randomIndex]);
         }
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, scareRadius);
-
+        
         foreach (Collider2D enemy in hitEnemies)
         {
             Debug.Log("Detected: " + enemy.gameObject.name);

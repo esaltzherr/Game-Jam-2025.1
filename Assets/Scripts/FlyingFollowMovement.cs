@@ -93,7 +93,7 @@ public class FlyingFollowMovement : MonoBehaviour
             // Ignore itself
             if (hit.collider.gameObject == gameObject) continue;
 
-            Debug.Log("Ray hit: " + hit.collider.gameObject.name + " | Layer: " + LayerMask.LayerToName(hit.collider.gameObject.layer));
+            // Debug.Log("Ray hit: " + hit.collider.gameObject.name + " | Layer: " + LayerMask.LayerToName(hit.collider.gameObject.layer));
 
             if (hit.collider.gameObject == Target)  // Ensure it's the target
             {
@@ -132,7 +132,8 @@ public class FlyingFollowMovement : MonoBehaviour
     }
 
     public void Scared(Transform player)
-    {
+    {   
+        Debug.Log("GETTIN SPOOKED");
         Vector2 bounceDirection = (rb.position - (Vector2)player.transform.position).normalized;
         rb.linearVelocity = bounceDirection * bounceForce;
 

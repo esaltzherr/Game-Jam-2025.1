@@ -27,7 +27,7 @@ public class TorchBar : MonoBehaviour
     void Update()
     {
         if(filling && currentTorchTime < maxTorchTime){
-            currentTorchTime += Time.deltaTime * 5;
+            currentTorchTime += Time.deltaTime * 20;
 
         }
         else if(!filling && currentTorchTime > 0)
@@ -56,5 +56,9 @@ public class TorchBar : MonoBehaviour
     public float GetTorchPercentage()
     {
         return (currentTorchTime / maxTorchTime) * 100f;
+    }
+    public float GetTorchNum()
+    {
+        return currentTorchTime;
     }
 }
