@@ -1059,7 +1059,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UIClickSound: {fileID: 8300000, guid: 0902c887fe2eaa84d9317ce0febf6988, type: 3}
   gentleMusic: {fileID: 8300000, guid: e8210a2b76e0caf4c9ef3415ca622943, type: 3}
-  MainMenuMusic: {fileID: 8300000, guid: caec327953637df4c86444d696937249, type: 3}
 --- !u!1 &715272744
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,7 +5,6 @@ using System.Collections;
 public class Cave_Checkpoint : MonoBehaviour
 {
     private Vector2 checkpointPos;
-    public GameObject respawnPoint;
     private Movement player;
     private int branchCount; // Track branches collected
 
@@ -76,7 +75,7 @@ public class Cave_Checkpoint : MonoBehaviour
         yield return new WaitForSeconds(duration);
 
         // Respawn at checkpoint
-        player.transform.position = respawnPoint.transform.position;
+        player.transform.position = checkpointPos;
         player.transform.localScale = Vector3.one;
         playerRb.simulated = true;
 

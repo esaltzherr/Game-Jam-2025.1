@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class TorchBar : MonoBehaviour
 {
     public Slider torchSlider; // Drag & drop the UI Slider in Inspector
-    public float maxTorchTime = 250f; // Maximum torch duration in seconds
+    public float maxTorchTime = 180f; // Maximum torch duration in seconds
     private float currentTorchTime;
     private bool filling = false;
     public Animator playerAnimator;
