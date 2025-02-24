@@ -6,18 +6,21 @@ using System.Collections.Generic;
 
 public class Movement : MonoBehaviour
 {
-    [SerializeField] private float speed;
+    [SerializeField] private float speed; 
     [SerializeField] private float sprintMultiplier;
     [SerializeField] private float jump;
     [SerializeField] private float bounceForce;       // Bounce force for enemies
     [SerializeField] private float hazardBounceForce; // Stronger/weaker bounce force for hazards
-    [SerializeField] private float shrinkScaleY;
-    [SerializeField] private float normalScaleY;
     [SerializeField] private float slideSpeedMultiplier = 2f;
     [SerializeField] private float slideDuration = 0.5f;
     [SerializeField] private int maxHealth = 3;
     [SerializeField] private float healCooldown = 5f;
     [SerializeField] private Image damageOverlay; // UI overlay for red flash effect
+   
+    [SerializeField] private Transform crouchPivot; 
+    [SerializeField] private float crouchOffsetY = -0.5f; 
+
+    private Vector3 standingPosition;
 
     private Rigidbody2D body;
     private bool grounded;
@@ -26,7 +29,6 @@ public class Movement : MonoBehaviour
     private bool isBouncing = false;
     private bool running = false;
 
-    private Vector3 originalScale;
     private bool isCrouching = false;
     private float originalSpeed;
     private float crouchSpeed;
@@ -64,7 +66,7 @@ public class Movement : MonoBehaviour
     {
         body = GetComponent<Rigidbody2D>();
         body.freezeRotation = true;
-        originalScale = transform.localScale;
+        standingPosition = transform.position;
 
         originalSpeed = speed;
         crouchSpeed = speed / 2f;
@@ -162,9 +164,7 @@ public class Movement : MonoBehaviour
                 isCrouching = true;
                 speed = crouchSpeed;
 
-                // Preserve facing when resizing character
-                float currentX = (facing == "Right") ? Mathf.Abs(originalScale.x) : -Mathf.Abs(originalScale.x);
-                transform.localScale = new Vector3(currentX, shrinkScaleY, originalScale.z);
+                transform.position = new Vector3(transform.position.x, standingPosition.y + crouchOffsetY, transform.position.z);
 
             }
         }
@@ -173,9 +173,7 @@ public class Movement : MonoBehaviour
             isCrouching = false;
             speed = originalSpeed;
 
-            // Preserve facing when resetting scale
-            float currentX = (facing == "Right") ? Mathf.Abs(originalScale.x) : -Mathf.Abs(originalScale.x);
-            transform.localScale = new Vector3(currentX, normalScaleY, originalScale.z);
+            transform.position = new Vector3(transform.position.x, standingPosition.y, transform.position.z);
 
         }
 
